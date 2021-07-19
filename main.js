@@ -2,26 +2,26 @@
 
 
 const codeAmount = 180
+const path = "./codes.csv"
 
-let codes = []
+const fs = require('fs')
 
-while (codes.length < codeAmount) {
-    let x = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-    if (codes.includes(x)) {
-        continue;
-    } else {
-        if (x.length !== 5) {
-            continue;
-        } else {
-            codes.push({code: x})
-        }
-    }
-}
+let currentCodes = []
+
+fs.readFile(path, 'utf8', function (err, data) {
+    currentCodes = data.split(/\r?\n/);
+    console.log(currentCodes)
+
+})
+
+console.log(currentCodes)
+
+
 
 function hasDuplicates(array) {
-    var valuesSoFar = Object.create(null);
-    for (var i = 0; i < array.length; ++i) {
-        var value = array[i];
+    let valuesSoFar = Object.create(null);
+    for (let i = 0; i < array.length; ++i) {
+        let value = array[i];
         if (value.code in valuesSoFar) {
             return true;
         }
@@ -30,13 +30,11 @@ function hasDuplicates(array) {
     return false;
 }
 
-console.log(codes)
 console.log(codes.length)
 console.log(hasDuplicates(codes))
 
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-const csvWriter = createCsvWriter({
-    path: 'codes.csv',
+const csvWriter = require('csv-writer').createObjectCsvWriter({
+    path: `${path}`,
     header: [
         {id: 'code', title: 'Code'},
     ]
